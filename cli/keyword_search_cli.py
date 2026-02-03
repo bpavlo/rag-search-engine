@@ -2,7 +2,12 @@
 
 import argparse
 import json
+import string
 
+def preprocess_text(text: str) -> str:
+    text = text.lower()
+    text = text.translate(str.maketrans("", "", string.punctuation))
+    return text
 
 def search_movies(query: str) -> None:
      with open('data/movies.json', 'r') as f:
@@ -11,7 +16,7 @@ def search_movies(query: str) -> None:
      results = []
 
      for movie in data['movies']:
-         if query.lower() in movie['title'].lower():
+         if preprocess_text(query) in preprocess_text(movie['title']):
              results.append(movie)
 
      results.sort(key=lambda x: x['id'])
